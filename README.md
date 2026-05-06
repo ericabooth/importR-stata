@@ -53,6 +53,28 @@ importR using "data/my_results.Rdata", clear
 importR using "data/model_fit.rds", clear
 ```
 
+## 📤 Bonus Utility: `pythontoR.py`
+
+While `importR` is designed for Stata users, this repository also includes a standalone Python script, `pythontoR.py`, for converting Stata `.dta` files into R formats (`.rds` or `.rdata`) **outside of Stata**.
+
+### Requirements
+Ensure you have the required Python libraries:
+```bash
+pip install pyreadstat pyreadr pandas
+```
+
+### Usage (Command Line)
+```bash
+# Convert to RDS (default)
+python pythontoR.py mydata.dta
+
+# Convert to RData
+python pythontoR.py mydata.dta --format rdata
+
+# Specify output name
+python pythontoR.py mydata.dta -o exported_data.rds
+```
+
 ---
 
 ## 👤 Author

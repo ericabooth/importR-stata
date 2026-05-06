@@ -1,6 +1,6 @@
-# importR-stata
+# importR-stata (v2.0.0)
 
-**A simple Stata bridge for importing R data files (.Rdata, .Rda, .Rds).**
+**A dual-bridge (R/Python) Stata command for importing R data files (.Rdata, .Rda, .Rds).**
 
 [![Stata Version](https://img.shields.io/badge/Stata-16+-blue.svg)](https://www.stata.com)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -9,44 +9,49 @@
 
 ## 🚀 Overview
 
-`importR` is a Stata command that automates the process of bringing R-native data into your Stata environment. It handles the heavy lifting of background conversion, allowing you to treat R files as if they were native Stata datasets.
+`importR` v2.0 is a major upgrade that provides a robust way to bring R datasets into Stata. It is designed to work even if R is not installed on the system, by falling back to Stata's native Python integration.  It is not practically possible to import  R data using "pure" Stata commands (like file read or Mata) because .Rdata and .RDS files are  complex, compressed binary objects that use a custom serialization format. Parsing them from
+  scratch in Stata would require building a full binary decoder in Mata, which is a massive engineering undertaking. To avoid this, the "Hybrid" approach in importR first looks for R installed, if it doesn't find
+  R, it will attempt to use Stata's built-in Python integration (available in Stata 16 and newer).
+  This provides two paths to success:
+
+   1. Path A (R): Uses Rscript and the haven package (best for R users).
+   2. Path B (Python): Uses Stata's internal Python with the pyreadstat library (best for modern
+      Stata environments).
 
 ## ✨ Features
 
-- **Format Support:** Works with `.Rdata`, `.Rda` (workspaces), and `.Rds` (single objects).
-- **Automated Bridge:** Uses `Rscript` and the `haven` package to ensure high-fidelity conversion.
-- **Easy Workflow:** Simply provide the filename, and `importR` does the rest.
+- **Dual-Bridge Architecture:**
+  - **Primary (R):** Uses `Rscript` and the `haven` package.
+  - **Secondary (Python):** Uses Stata's `python` integration and the `pyreadstat` library.
+- **Format Support:** Works with `.Rdata`, `.Rda`, and `.Rds`.
+- **Intelligent Fallback:** Automatically detects the best available tool on your machine.
 
 ---
 
-## 🛠️ Prerequisites
+## 🛠️ Installation & Requirements
 
-To use this package, you must have:
-1. **R** installed on your system.
-2. **Rscript** in your system's PATH.
-3. The R **`haven`** package (the command will attempt to install it automatically if it's missing).
+### For the R Bridge (Default)
+- **R** and **Rscript** must be in your system's PATH.
+- The R package **`haven`** must be installed.
+
+### For the Python Bridge (Fallback)
+- **Stata 16** or newer.
+- The Python library **`pyreadstat`**. You can install it from within Stata:
+  ```stata
+  python pip install pyreadstat
+  ```
 
 ---
 
 ## 📖 Quick Start
 
 ```stata
-* Import a standard R workspace
+* The command will automatically choose the best method
 importR using "data/my_results.Rdata", clear
 
-* Import a single R object file
+* Works with RDS files too
 importR using "data/model_fit.rds", clear
 ```
-
----
-
-## ⚙️ Options
-
-| Option | Description |
-| :--- | :--- |
-| `using` | Path to the R data file. |
-| `clear` | Clears Stata memory before import. |
-| `rds`   | Force RDS mode (useful if the file lacks an extension). |
 
 ---
 

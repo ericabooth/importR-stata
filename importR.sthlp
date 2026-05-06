@@ -4,7 +4,7 @@
 help for {hi:importR}
 {hline}
 
-{title:Import R data files into Stata}
+{title:Import R data files into Stata via R or Python}
 
 {p 4 8 2} 
 {cmd:importR}
@@ -14,22 +14,35 @@ help for {hi:importR}
 {title:Description}
 
 {p 4 4 2}
-{cmd:importR} provides a simple bridge to import R data files into Stata. It supports 
-{cmd:.Rdata}, {cmd:.Rda}, and {cmd:.Rds} formats. 
+{cmd:importR} (v2.0.0) provides a robust bridge to import R data files (.Rdata, .Rda, .Rds) 
+into Stata. It uses a dual-bridge architecture to ensure compatibility across 
+different system environments.
+
+{title:How it Works}
 
 {p 4 4 2}
-The command works by calling {cmd:Rscript} in the background, loading the R object, 
-and converting it to a Stata-compatible format using the R {cmd:haven} package.
+The command follows a two-step fallback logic:
+
+{p 4 8 2}
+1. {cmd:R Bridge}: It first attempts to call {cmd:Rscript}. If found, it uses 
+R and the {cmd:haven} package to convert the data. {p_end}
+
+{p 4 8 2}
+2. {cmd:Python Bridge}: If R is not found, it attempts to use Stata's internal 
+{help python} integration and the {cmd:pyreadstat} library. {p_end}
 
 {title:Requirements}
 
-{p 4 8 2}
-1. {cmd:R} must be installed on your system. {p_end}
-{p 4 8 2}
-2. {cmd:Rscript} must be available in your system's PATH. {p_end}
-{p 4 8 2}
-3. The R {cmd:haven} package is required (the script will attempt to install it 
-automatically if missing). {p_end}
+{p 4 4 2}
+To use the R Bridge (Default):
+{p 8 12 2} - R and {cmd:Rscript} must be in your system's PATH. {p_end}
+{p 8 12 2} - R package {cmd:haven} must be installed. {p_end}
+
+{p 4 4 2}
+To use the Python Bridge (Fallback):
+{p 8 12 2} - Stata 16 or newer. {p_end}
+{p 8 12 2} - Python library {cmd:pyreadstat} must be installed. {p_end}
+{p 8 12 2} - Installation command: {cmd:python pip install pyreadstat} {p_end}
 
 {title:Options}
 
@@ -37,15 +50,15 @@ automatically if missing). {p_end}
 {cmd:clear} clears any data currently in Stata's memory before importing. {p_end}
 
 {p 4 8 2}
-{cmd:rds} specifies that the source file is an RDS file. This is usually detected 
-automatically from the file extension. {p_end}
+{cmd:rds} specifies that the source file is an RDS file. Usually detected 
+automatically. {p_end}
 
 {title:Examples}
 
-{p 4 4 2}Import an R workspace file:{p_end}
+{p 4 4 2}Import an R workspace file (tries R first, then Python):{p_end}
 {p 8 12 2}{cmd:. importR using "mydata.Rdata", clear}{p_end}
 
-{p 4 4 2}Import a single R object file:{p_end}
+{p 4 4 2}Import an RDS file:{p_end}
 {p 8 12 2}{cmd:. importR using "results.rds", clear}{p_end}
 
 {title:Author}
@@ -56,4 +69,4 @@ automatically from the file extension. {p_end}
 
 {title:Also see}
 
-{p 4 8 2}On-line:  help for {help import}, {help shell}
+{p 4 8 2}On-line:  help for {help import}, {help python}, {help shell}

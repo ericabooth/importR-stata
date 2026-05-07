@@ -31,6 +31,13 @@ R and the {cmd:haven} package to convert the data. {p_end}
 2. {cmd:Python Bridge}: If R is not found, it attempts to use Stata's internal 
 {help python} integration and the {cmd:pyreadstat} library. {p_end}
 
+{title:Standalone Utilities}
+
+{p 4 4 2}
+For users working outside of Stata, this package also includes standalone 
+Python utilities ({cmd:RtoStata.py} and {cmd:pythontoR.py}) for bi-directional 
+conversion between R and Stata formats. See the {cmd:README.md} for details.
+
 {title:Requirements}
 
 {p 4 4 2}

@@ -1,9 +1,9 @@
-*! importR - Dual-bridge (R/Python) importer for R data files
+*! importr - Dual-bridge (R/Python) importer for R data files
 *! Eric A. Booth <eric.a.booth@gmail.com>
 *! Version 2.0.0 : May 2026
 ** Version 1.0.0 : May 2026
 
-program define importR, rclass
+program define importr, rclass
     version 16
     syntax using/ [, Replace CLEAR RDS]
 
@@ -64,7 +64,7 @@ program define _sv_run_r
     _sv_report "`using'"
     
     return local filename "`using'"
-    return scalar nobs = `_N'
+    return scalar nobs = _N
     return scalar nvars = c(k)
 end
 
@@ -85,7 +85,6 @@ try:
     if is_rds:
         df, meta = pyreadstat.read_rds(using)
     else:
-        # read_rport handles both .RData and .Rda
         df, meta = pyreadstat.read_rport(using)
     
     pyreadstat.write_dta(df, temp_dta)
@@ -103,7 +102,7 @@ end
     _sv_report "`using'"
     
     return local filename "`using'"
-    return scalar nobs = `_N'
+    return scalar nobs = _N
     return scalar nvars = c(k)
 end
 

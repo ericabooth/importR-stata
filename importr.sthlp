@@ -1,20 +1,20 @@
 {smcl}
 {* May2026}{...}
 {hline}
-help for {hi:importR}
+help for {hi:importr}
 {hline}
 
 {title:Import R data files into Stata via R or Python}
 
 {p 4 8 2} 
-{cmd:importR}
+{cmd:importr}
 {cmd:using} {it:filename}
 [{cmd:,} {cmd:clear} {cmd:rds}]
 
 {title:Description}
 
 {p 4 4 2}
-{cmd:importR} (v2.0.0) provides a robust bridge to import R data files (.Rdata, .Rda, .Rds) 
+{cmd:importr} (v2.0.0) provides a robust bridge to import R data files (.Rdata, .Rda, .Rds) 
 into Stata. It uses a dual-bridge architecture to ensure compatibility across 
 different system environments.
 
@@ -63,10 +63,10 @@ automatically. {p_end}
 {title:Examples}
 
 {p 4 4 2}Import an R workspace file (tries R first, then Python):{p_end}
-{p 8 12 2}{cmd:. importR using "mydata.Rdata", clear}{p_end}
+{p 8 12 2}{cmd:. importr using "mydata.Rdata", clear}{p_end}
 
 {p 4 4 2}Import an RDS file:{p_end}
-{p 8 12 2}{cmd:. importR using "results.rds", clear}{p_end}
+{p 8 12 2}{cmd:. importr using "results.rds", clear}{p_end}
 
 {title:Author}
 

@@ -1,4 +1,4 @@
 v 3
-d importR: import R data files (.Rdata, .Rda, .Rds) into Stata over an R or Python bridge
+d importr: import R data files (.Rdata, .Rda, .Rds) into Stata over an R or Python bridge
 d Eric A. Booth, Sr Researcher, Texas 2036, eric.a.booth@gmail.com
-p importR
+p importr

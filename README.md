@@ -1,4 +1,4 @@
-# importR-stata (v2.0.0)
+# importr-stata (v2.0.0)
 
 **A dual-bridge (R/Python) Stata command for importing R data files (.Rdata, .Rda, .Rds).**
 
@@ -9,8 +9,8 @@
 
 ## 🚀 Overview
 
-`importR` v2.0 is a major upgrade that provides a robust way to bring R datasets into Stata. It is designed to work even if R is not installed on the system, by falling back to Stata's native Python integration.  It is not practically possible to import  R data using "pure" Stata commands (like file read or Mata) because .Rdata and .RDS files are  complex, compressed binary objects that use a custom serialization format. Parsing them from
-  scratch in Stata would require building a full binary decoder in Mata, which is a massive engineering undertaking. To avoid this, the "Hybrid" approach in importR first looks for R installed, if it doesn't find
+`importr` v2.0 is a major upgrade that provides a robust way to bring R datasets into Stata. It is designed to work even if R is not installed on the system, by falling back to Stata's native Python integration.  It is not practically possible to import  R data using "pure" Stata commands (like file read or Mata) because .Rdata and .RDS files are  complex, compressed binary objects that use a custom serialization format. Parsing them from
+  scratch in Stata would require building a full binary decoder in Mata, which is a massive engineering undertaking. To avoid this, the "Hybrid" approach in importr first looks for R installed, if it doesn't find
   R, it will attempt to use Stata's built-in Python integration (available in Stata 16 and newer).
   This provides two paths to success:
 
@@ -33,24 +33,24 @@
 Install from GitHub in Stata:
 
 ```stata
-net install importR, from("https://raw.githubusercontent.com/ericabooth/importR-stata/main/") replace force
+net install importr, from("https://raw.githubusercontent.com/ericabooth/importR-stata/main/") replace force
 discard
-which importR
-help importR
+which importr
+help importr
 ```
 
 To pull the example R dataset alongside the command, `net get` the ancillary file:
 
 ```stata
-net get importR, from("https://raw.githubusercontent.com/ericabooth/importR-stata/main/")
-importR using example.rdata, clear
+net get importr, from("https://raw.githubusercontent.com/ericabooth/importR-stata/main/")
+importr using example.rdata, clear
 ```
 
 `net get` drops ancillary files into the current directory and lowercases the
 name, so the example arrives as `example.rdata` even though the repository
 stores it as `examples/example.Rdata`.
 
-`importR` needs one of the two bridges below on the machine.
+`importr` needs one of the two bridges below on the machine.
 
 ### For the R Bridge (Default)
 - **R** and **Rscript** must be in your system's PATH.
@@ -69,15 +69,15 @@ stores it as `examples/example.Rdata`.
 
 ```stata
 * The command will automatically choose the best method
-importR using "data/my_results.Rdata", clear
+importr using "data/my_results.Rdata", clear
 
 * Works with RDS files too
-importR using "data/model_fit.rds", clear
+importr using "data/model_fit.rds", clear
 ```
 
 ## 📤 Bonus Utilities: Python Standalone Tools
 
-While `importR` is designed for Stata users, this repository also includes standalone Python scripts for converting between Stata and R formats **outside of Stata**.
+While `importr` is designed for Stata users, this repository also includes standalone Python scripts for converting between Stata and R formats **outside of Stata**.
 
 ### Requirements
 Ensure you have the required Python libraries:

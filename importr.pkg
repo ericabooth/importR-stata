@@ -1,9 +1,9 @@
 v 3
-d importR: import R data files (.Rdata, .Rda, .Rds) into Stata over an R or Python bridge
+d importr: import R data files (.Rdata, .Rda, .Rds) into Stata over an R or Python bridge
 d
 d .Rdata and .Rds files are compressed binary objects in R's own serialization
 d format, so there is no pure-Stata way to read them; something outside Stata has
-d to do the decoding.  importR takes a dual-bridge approach so that it works on
+d to do the decoding.  importr takes a dual-bridge approach so that it works on
 d machines with R and on machines without it.  It first looks for Rscript and, if
 d found, converts the file through the haven package.  If R is absent it falls
 d back to Stata's built-in Python integration and the pyreadstat library.  Either
@@ -19,6 +19,6 @@ d Support: eric.a.booth@gmail.com
 d
 d Distribution-Date: 20260725
 d
-f importR.ado
-f importR.sthlp
+f importr.ado
+f importr.sthlp
 f examples/example.Rdata

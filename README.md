@@ -110,6 +110,7 @@ python pythontoR.py mydata.dta --format rdata
 ## 👤 Author
 
 **Eric A. Booth**
+- 🏛️ Sr Researcher, Texas 2036
 - 📧 [eric.a.booth@gmail.com](mailto:eric.a.booth@gmail.com)
 - 🌐 [www.eric-booth.com](http://www.eric-booth.com)
 - 💼 [GitHub Profile](https://github.com/ericabooth)

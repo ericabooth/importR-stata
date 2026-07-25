@@ -30,6 +30,28 @@
 
 ## 🛠️ Installation & Requirements
 
+Install from GitHub in Stata:
+
+```stata
+net install importR, from("https://raw.githubusercontent.com/ericabooth/importR-stata/main/") replace force
+discard
+which importR
+help importR
+```
+
+To pull the example R dataset alongside the command, `net get` the ancillary file:
+
+```stata
+net get importR, from("https://raw.githubusercontent.com/ericabooth/importR-stata/main/")
+importR using example.rdata, clear
+```
+
+`net get` drops ancillary files into the current directory and lowercases the
+name, so the example arrives as `example.rdata` even though the repository
+stores it as `examples/example.Rdata`.
+
+`importR` needs one of the two bridges below on the machine.
+
 ### For the R Bridge (Default)
 - **R** and **Rscript** must be in your system's PATH.
 - The R package **`haven`** must be installed.

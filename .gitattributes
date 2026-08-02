@@ -1,2 +1,8 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# R data files are gzipped binaries: never apply EOL normalization to them,
+# or a Windows clone gets a corrupted file that R and pyreadr cannot read.
+*.rdata binary
+*.Rdata binary
+*.rds   binary

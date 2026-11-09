@@ -1,5 +1,5 @@
 {smcl}
-{* May2026}{...}
+{* *! version 2.0.3  09nov2026}{...}
 {hline}
 help for {hi:importr}
 {hline}
@@ -14,7 +14,7 @@ help for {hi:importr}
 {title:Description}
 
 {p 4 4 2}
-{cmd:importr} (v2.0.2) imports R data files (.Rdata, .Rda, .Rds) into Stata.
+{cmd:importr} (v2.0.3) imports R data files (.Rdata, .Rda, .Rds) into Stata.
 R stores these as compressed binary objects in its own serialization format,
 so something outside Stata has to do the decoding. {cmd:importr} can use
 either of two external routes, so it works on machines with R and on machines
@@ -29,12 +29,22 @@ which route ran.
 
 {p 4 8 2}
 1. {cmd:R bridge}: writes a short R script and runs it with {cmd:Rscript},
-converting the file through the {cmd:haven} package. {p_end}
+converting the file through the {cmd:haven} package. If {cmd:haven} is not
+installed, the script installs it from CRAN ({cmd:install.packages("haven")})
+before converting, which needs an internet connection and writes to your R
+library. {p_end}
 
 {p 4 8 2}
 2. {cmd:Python bridge}: if the R bridge does not produce a dataset,
 {cmd:importr} falls back to Stata's {help python} integration, reading the
 file with {cmd:pyreadr} and writing the .dta with {cmd:pyreadstat}. {p_end}
+
+{p 4 4 2}
+{it:Files with several objects.} An {cmd:.Rdata} or {cmd:.Rda} file can hold
+more than one object. Both bridges read the same one: the first data frame by
+name, in C-locale order (upper case sorts before lower case). Its name is
+printed as {cmd:Object:} and stored in {cmd:r(object)}. An {cmd:.rds} file holds
+a single object, so no name is reported.
 
 {p 4 4 2}
 {it:Note on R factors.} The two bridges do not encode factors identically.
@@ -58,7 +68,10 @@ For the R bridge:{p_end}
 For the Python bridge:{p_end}
 {p 8 12 2} - Stata's Python integration configured ({stata python query}). {p_end}
 {p 8 12 2} - Python libraries {cmd:pyreadr} and {cmd:pyreadstat}. {p_end}
-{p 8 12 2} - Install with: {stata python pip install pyreadr pyreadstat} {p_end}
+{p 8 12 2} - Install them into the Python that {cmd:python query} reports, from a
+terminal (not from Stata), for example
+{cmd:/path/to/python3 -m pip install pyreadr pyreadstat}. When the Python
+bridge cannot run, {cmd:importr} prints this command with the right path. {p_end}
 
 {p 4 4 2}
 If R is installed but {cmd:importr} does not find it, the usual cause is that
@@ -83,7 +96,9 @@ bi-directional conversion between R and Stata formats:
 {title:Options}
 
 {p 4 8 2}
-{cmd:clear} clears any data currently in Stata's memory before importing. {p_end}
+{cmd:clear} clears any data currently in Stata's memory before importing.
+Without it, if the data in memory have changed, {cmd:importr} stops with
+r(4) before reading anything. {p_end}
 
 {p 4 8 2}
 {cmd:rds} specifies that the source file is an RDS file. Usually detected 
@@ -97,6 +112,7 @@ automatically. {p_end}
 {p 4 8 2}{cmd:r(nobs)}     number of observations imported {p_end}
 {p 4 8 2}{cmd:r(nvars)}    number of variables imported {p_end}
 {p 4 8 2}{cmd:r(filename)} the file that was read {p_end}
+{p 4 8 2}{cmd:r(object)}   the object read from an {cmd:.Rdata}/{cmd:.Rda} file {p_end}
 
 {title:Examples}
 
@@ -121,6 +137,14 @@ with {stata net get importr}, then run these from the same folder.
 A file that is not there is reported as such, with return code 601, rather
 than as a bridge or library failure:{p_end}
 {p 8 12 2}{cmd:. importr using "nosuch.Rdata", clear}{p_end}
+
+{title:Changes}
+
+{p 4 4 2}2.0.3 (09nov2026): changed data in memory without {cmd:clear} give
+r(4) instead of a misleading bridge error; the install advice gives a pip
+command to run in a terminal ({cmd:python pip} is not a Stata command); both
+bridges pick the same object from a multi-object {cmd:.Rdata} file and report
+it in {cmd:r(object)}.
 
 {title:Author}
 

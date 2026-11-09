@@ -1,4 +1,4 @@
-# importr-stata (v2.0.0)
+# importr-stata (v2.0.3)
 
 **A dual-bridge (R/Python) Stata command for importing R data files (.Rdata, .Rda, .Rds).**
 
@@ -15,14 +15,14 @@
   This provides two paths to success:
 
    1. Path A (R): Uses Rscript and the haven package (best for R users).
-   2. Path B (Python): Uses Stata's internal Python with the pyreadstat library (best for modern
-      Stata environments).
+   2. Path B (Python): Uses Stata's internal Python with the pyreadr library (to read the R
+      file) and pyreadstat (to write the .dta) (best for modern Stata environments).
 
 ## ✨ Features
 
 - **Dual-Bridge Architecture:**
   - **Primary (R):** Uses `Rscript` and the `haven` package.
-  - **Secondary (Python):** Uses Stata's `python` integration and the `pyreadstat` library.
+  - **Secondary (Python):** Uses Stata's `python` integration with the `pyreadr` and `pyreadstat` libraries.
 - **Format Support:** Works with `.Rdata`, `.Rda`, and `.Rds`.
 - **Intelligent Fallback:** Automatically detects the best available tool on your machine.
 
@@ -39,29 +39,35 @@ which importr
 help importr
 ```
 
-To pull the example R dataset alongside the command, `net get` the ancillary file:
+To pull the example R datasets alongside the command, `net get` the ancillary files:
 
 ```stata
 net get importr, from("https://raw.githubusercontent.com/ericabooth/importR-stata/main/")
-importr using example.rdata, clear
+importr using importr_example.rdata, clear
+importr using importr_example.rds, clear
 ```
 
-`net get` drops ancillary files into the current directory and lowercases the
-name, so the example arrives as `example.rdata` even though the repository
-stores it as `examples/example.Rdata`.
+`net get` drops the two example files, `importr_example.rdata` and
+`importr_example.rds`, into the current directory.
 
 `importr` needs one of the two bridges below on the machine.
 
 ### For the R Bridge (Default)
 - **R** and **Rscript** must be in your system's PATH.
-- The R package **`haven`** must be installed.
+- The R package **`haven`**. If it is missing, the bridge installs it from CRAN
+  (`install.packages("haven")`) before converting, which needs an internet
+  connection and writes to your R library.
 
 ### For the Python Bridge (Fallback)
 - **Stata 16** or newer.
-- The Python library **`pyreadstat`**. You can install it from within Stata:
-  ```stata
-  python pip install pyreadstat
+- The Python libraries **`pyreadr`** and **`pyreadstat`**, installed into the
+  Python that `python query` reports. `python pip` is not a Stata command, so
+  run pip from a terminal:
+  ```bash
+  /path/to/that/python3 -m pip install pyreadr pyreadstat
   ```
+  When the Python bridge cannot run, `importr` prints this command with the
+  right path.
 
 ---
 
@@ -71,9 +77,21 @@ stores it as `examples/example.Rdata`.
 * The command will automatically choose the best method
 importr using "data/my_results.Rdata", clear
 
-* Works with RDS files too
+* Works with RDS files too (detected from the extension; the rds option forces it)
 importr using "data/model_fit.rds", clear
+importr using "data/model_fit.dat", clear rds
+
+* What was read
+display r(nobs) " obs, " r(nvars) " vars from " r(filename) " (object " r(object) ")"
 ```
+
+Options: `clear` replaces the data in memory (without it, changed data in
+memory stop `importr` with `r(4)`); `rds` treats the file as an RDS file.
+
+Stored results: `r(nobs)`, `r(nvars)`, `r(filename)`, and, for `.Rdata`/`.Rda`
+files, `r(object)`, the name of the object read. A file with several objects
+gives the first data frame by name (C-locale order), the same with either
+bridge.
 
 ## 📤 Bonus Utilities: Python Standalone Tools
 
@@ -106,6 +124,11 @@ python pythontoR.py mydata.dta --format rdata
 ```
 
 ---
+
+## Changelog
+
+- **2.0.3 (9 Nov 2026):** changed data in memory without `clear` now give `r(4)` instead of a misleading "needs R or pyreadr" error; the install advice prints a pip command to run in a terminal (`python pip` is not a Stata command); both bridges take the same object from a multi-object `.Rdata` file and report it in `r(object)`. `RtoStata.py` now uses `pyreadr.read_r()` (it called `read_rds()`/`read_rdata()`, which pyreadr does not provide).
+- **2.0.2 (Aug 2026):** bridge subroutines are rclass; each bridge is attempted in turn; Windows paths.
 
 ## 👤 Author
 

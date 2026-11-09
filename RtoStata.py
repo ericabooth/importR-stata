@@ -2,7 +2,7 @@
 """
 RtoStata.py - Convert R data files (.rds, .Rdata, .Rda) to Stata .dta format.
 Author: Eric A. Booth <eric.a.booth@gmail.com>
-Version: 1.0.0
+Version: 1.0.1 (uses pyreadr.read_r; picks the first data frame by name)
 """
 
 import os
@@ -27,15 +27,17 @@ def convert_r_to_stata(input_file, output_file=None, version=14):
     ext = os.path.splitext(input_file)[1].lower()
     
     try:
+        # pyreadr.read_r reads .rds, .Rdata and .Rda and returns a dict of
+        # data frames (an .rds file gives a single entry keyed None)
+        result = pyreadr.read_r(input_file)
         if ext == '.rds':
-            result = pyreadr.read_rds(input_file)
-            # read_rds returns a single object (the dataframe)
-            df = result
+            df = result[None]
         else:
-            # Handles .Rdata / .Rda
-            result = pyreadr.read_rdata(input_file)
-            # read_rdata returns a dictionary. We take the first object.
-            obj_name = list(result.keys())[0]
+            # Same rule as importr: the first data frame by name
+            names = sorted(k for k in result.keys() if k is not None)
+            if not names:
+                raise ValueError("no data frame found in the file")
+            obj_name = names[0]
             df = result[obj_name]
             print(f"Extracted object: '{obj_name}'")
     except Exception as e:

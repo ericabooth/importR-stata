@@ -13,12 +13,13 @@ d
 d Requires: Stata 16.0 or newer, plus ONE of:
 d   R with the haven package (Rscript on the PATH), or
 d   Stata's Python integration with pyreadr and pyreadstat
-d   (python pip install pyreadr pyreadstat).
+d   (install them from a terminal into the Python that -python query- shows:
+d   python3 -m pip install pyreadr pyreadstat).
 d
 d Author: Eric A. Booth, Sr Researcher, Texas 2036
 d Support: eric.a.booth@gmail.com
 d
-d Distribution-Date: 20260802
+d Distribution-Date: 20261109
 d
 f importr.ado
 f importr.sthlp

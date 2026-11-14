@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 2.0.3  09nov2026}{...}
+{* *! version 2.0.4  14nov2026}{...}
 {hline}
 help for {hi:importr}
 {hline}
@@ -14,7 +14,7 @@ help for {hi:importr}
 {title:Description}
 
 {p 4 4 2}
-{cmd:importr} (v2.0.3) imports R data files (.Rdata, .Rda, .Rds) into Stata.
+{cmd:importr} (v2.0.4) imports R data files (.Rdata, .Rda, .Rds) into Stata.
 R stores these as compressed binary objects in its own serialization format,
 so something outside Stata has to do the decoding. {cmd:importr} can use
 either of two external routes, so it works on machines with R and on machines
@@ -67,10 +67,11 @@ For the R bridge:{p_end}
 {p 4 4 2}
 For the Python bridge:{p_end}
 {p 8 12 2} - Stata's Python integration configured ({stata python query}). {p_end}
-{p 8 12 2} - Python libraries {cmd:pyreadr} and {cmd:pyreadstat}. {p_end}
+{p 8 12 2} - Python libraries {cmd:pyreadr}, {cmd:pyreadstat} and {cmd:pandas}
+({cmd:pyreadr} does not import without {cmd:pandas}). {p_end}
 {p 8 12 2} - Install them into the Python that {cmd:python query} reports, from a
 terminal (not from Stata), for example
-{cmd:/path/to/python3 -m pip install pyreadr pyreadstat}. When the Python
+{cmd:/path/to/python3 -m pip install pyreadr pyreadstat pandas}. When the Python
 bridge cannot run, {cmd:importr} prints this command with the right path. {p_end}
 
 {p 4 4 2}
@@ -139,6 +140,10 @@ than as a bridge or library failure:{p_end}
 {p 8 12 2}{cmd:. importr using "nosuch.Rdata", clear}{p_end}
 
 {title:Changes}
+
+{p 4 4 2}2.0.4 (14nov2026): the install advice (here and in the message
+{cmd:importr} prints) adds {cmd:pandas}, which current {cmd:pyreadr} needs
+before it will import.
 
 {p 4 4 2}2.0.3 (09nov2026): changed data in memory without {cmd:clear} give
 r(4) instead of a misleading bridge error; the install advice gives a pip

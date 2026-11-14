@@ -1,5 +1,9 @@
 *! importr - Dual-bridge (R/Python) importer for R data files
 *! Eric A. Booth <eric.a.booth@gmail.com>
+*! Version 2.0.4 : 14nov2026
+*!   - the install advice names pandas as well: current pyreadr refuses to
+*!     import without pandas (or polars), so "pip install pyreadr pyreadstat"
+*!     alone left the Python bridge unusable.
 *! Version 2.0.3 : 09nov2026
 *!   - without clear, changed data in memory now stop importr with r(4) "no;
 *!     data in memory would be lost" before either bridge runs (the bridges'
@@ -89,7 +93,7 @@ program define importr, rclass
     di as err "importr: could not read `using'."
     di as txt "  importr needs one of:"
     di as txt "  - R on the system path, with the 'haven' package, or"
-    di as txt "  - Stata's Python integration, with pyreadr and pyreadstat."
+    di as txt "  - Stata's Python integration, with pyreadr, pyreadstat and pandas."
     _sv_pip_hint
     di as txt "  If R is installed but not found, check that Rscript is on the"
     di as txt "  path Stata sees ({stata di c(os)}: see {help shell})."
@@ -195,8 +199,8 @@ program define _sv_run_python, rclass
     cap confirm file "`dtafile'"
     if _rc {
         di as err "importr: the Python bridge did not produce a dataset."
-        di as txt "  It needs both pyreadr (to read the R file) and pyreadstat"
-        di as txt "  (to write the .dta)."
+        di as txt "  It needs pyreadr (to read the R file), pandas (which pyreadr"
+        di as txt "  requires), and pyreadstat (to write the .dta)."
         _sv_pip_hint
         exit 198
     }
@@ -234,12 +238,12 @@ end
 program define _sv_pip_hint
     capture quietly python query
     local exe `"`r(execpath)'"'
-    di as txt _n "  To install pyreadr and pyreadstat, run this in a terminal (not in Stata):"
+    di as txt _n "  To install pyreadr, pyreadstat and pandas, run this in a terminal (not in Stata):"
     if `"`exe'"' != "" {
-        di as txt `"    "`exe'" -m pip install pyreadr pyreadstat"'
+        di as txt `"    "`exe'" -m pip install pyreadr pyreadstat pandas"'
     }
     else {
-        di as txt "    python3 -m pip install pyreadr pyreadstat"
+        di as txt "    python3 -m pip install pyreadr pyreadstat pandas"
         di as smcl "  using the Python that Stata is set to use (see {help python})."
     }
 end

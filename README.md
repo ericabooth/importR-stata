@@ -60,11 +60,12 @@ importr using importr_example.rds, clear
 
 ### For the Python Bridge (Fallback)
 - **Stata 16** or newer.
-- The Python libraries **`pyreadr`** and **`pyreadstat`**, installed into the
+- The Python libraries **`pyreadr`**, **`pyreadstat`** and **`pandas`** (pyreadr
+  will not import without pandas), installed into the
   Python that `python query` reports. `python pip` is not a Stata command, so
   run pip from a terminal:
   ```bash
-  /path/to/that/python3 -m pip install pyreadr pyreadstat
+  /path/to/that/python3 -m pip install pyreadr pyreadstat pandas
   ```
   When the Python bridge cannot run, `importr` prints this command with the
   right path.
